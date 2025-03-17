@@ -1,9 +1,9 @@
  Password Management System (SPA)
 Descrição
 
-Este é um projeto de Gerenciador de Senhas onde os usuários podem armazenar, visualizar, editar e deletar credenciais de login de forma segura.
+Este é um projeto de Gerenciador de Senhas onde os usuários podem armazenar, visualizar, editar e apagar credenciais de login de forma segura.
 
- Funcionalidades
+Funcionalidades
 
 Registro e Login de Usuários
 Validação de Força da Senha
