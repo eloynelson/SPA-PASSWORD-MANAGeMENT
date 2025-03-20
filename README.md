@@ -21,7 +21,8 @@ Local Storage & JSON
 │── index.html  *(Página de Registro)*  
 │── login.html  *(Página de Login)*  
 │── script.js   *(Lógica do sistema)*  
-│── styles.css  *(Estilização do projeto)*  
+│── login.css  *(Estilo da pagina de login)* 
+│── index.css  *(Estilo da pagina de registro)* 
 │── users.json  *(Lista de usuários)*  
 │── README.md  *(Este arquivo)* 
 
