@@ -1,37 +1,55 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
-  <head>
+<html lang="en">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> Create Account</title> 
-    <link rel="stylesheet" href="index.css">
-   </head>
+    <title>PSAFE - Password Manager</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
 <body>
-  <div class="wrapper">
-    <h2> Create Your Account</h2>
-    <form action="#">
-      <div class="input-box">
-        <input type="text" placeholder="Enter your name" required>
-      </div>
-      <div class="input-box">
-        <input type="text" placeholder="Enter your email" required>
-      </div>
-      <div class="input-box">
-        <input type="password" placeholder="Create password" required>
-      </div>
-      <div class="input-box">
-        <input type="password" placeholder="Confirm password" required>
-      </div>
-      <div class="">
-        <h3></h3>
-      </div>
-      <div class="input-box button">
-        <input type="Submit" value="Create ">
-      </div>
-      <div class="text">
-        <h3>Already have an account? <a href="Login.html">Login now</a></h3>
-      </div>
-    </form>
-  </div>
+    <div class="wrapper" id="app">
+        <!-- Login Section -->
+        <section id="login-section" class="form-section">
+            <h1>PSAFE</h1>
+            <form id="login-form">
+                <label for="login-username">Username</label>
+                <input id="login-username" type="text" placeholder="Enter your username" required>
+                
+                <label for="login-password">Password</label>
+                <input id="login-password" type="password" placeholder="Enter your password" required>
+                
+                <button type="submit">Login</button>
+                
+                <p>Don't have an account? <a href="#" id="show-signup">Sign up</a></p>
+            </form>
+        </section>
+
+        <!-- Signup Section -->
+        <section id="signup-section" class="form-section" style="display: none;">
+            <h2>Sign up</h2>
+            <form id="signup-form">
+                <div class="input-box">
+                    <input type="text" id="signup-name" placeholder="Enter your name" required>
+                </div>
+                <div class="input-box">
+                    <input type="email" id="signup-email" placeholder="Enter your email" required>
+                </div>
+                <div class="input-box">
+                    <input type="password" id="signup-password" placeholder="Create password" required>
+                </div>
+                <div class="input-box">
+                    <input type="password" id="confirm-password" placeholder="Confirm password" required>
+                </div>
+                <div class="input-box button">
+                    <input type="submit" value="Create Account">
+                </div>
+                <div class="text">
+                    <h3>Already have an account? <a href="#" id="show-login">Login now</a></h3>
+                </div>
+            </form>
+        </section>
+    </div>
+
+    <script src="app.js"></script>
 </body>
 </html>
