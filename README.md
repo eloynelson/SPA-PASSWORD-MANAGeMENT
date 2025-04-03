@@ -1,14 +1,15 @@
- Password Management System (SPA)
-Descrição
+PSAFE - Password Manager
 
-Este é um projeto de Gerenciador de Senhas onde os usuários podem armazenar, visualizar, editar e apagar credenciais de login de forma segura.
+PSAFE is a secure password manager that allows users to store their credentials safely. The application provides user authentication, password management, and local storage capabilities.
 
-Funcionalidades
+ Features
 
-Registro e Login de Usuários
+Sign up and login securely.
 Validação de Força da Senha
 Armazenamento Seguro com Local Storage
 Edição e Exclusão de Credenciais
+Password Storage** - Store passwords for different websites and apps.
+
 
 Tecnologias Utilizadas
 
@@ -17,14 +18,12 @@ HTML, CSS, JavaScript
 Local Storage & JSON
 
 
-/project-folders  
-│── index.html  *(Página de Registro)*  
-│── login.html  *(Página de Login)*  
-│── script.js   *(Lógica do sistema)*  
-│── login.css  *(Estilo da pagina de login)* 
-│── index.css  *(Estilo da pagina de registro)* 
-│── users.json  *(Lista de usuários)*  
-│── README.md  *(Este arquivo)* 
+/project-folder
+  ├── index.html
+  ├── users.json
+  ├── projeto.js
+  └── projeto.css
+
 
 
  Como Executar
@@ -37,7 +36,7 @@ Registre-se e faça login
 
 
 
- Autor: Eloy Francisco - Ano: 2025
+Developed by Eloy Francisco - Ano: 2025
 
 
 
