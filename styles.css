@@ -15,32 +15,26 @@ body {
 }
 
 .wrapper {
-    max-width: 500px;
+    max-width: 600px;
     width: 100%;
     background: #ffffff;
     border-radius: 6px;
     box-shadow: 0px 4px 10px 1px rgba(0, 0, 0, 0.1);
     padding: 20px;
+    text-align: center;
 }
 
+/* Form Styles */
 .form-section h1,
 .form-section h2 {
     font-size: 50px;
     font-weight: 600;
     color: #000000;
-    text-align: center;
     margin-bottom: 20px;
     font-style: oblique;
 }
 
-.form-section label,
-.input-box {
-    display: block;
-    margin-bottom: 15px;
-}
-
-.form-section input,
-.input-box input {
+.form-section input {
     height: 50px;
     width: 100%;
     padding: 0 15px;
@@ -48,21 +42,15 @@ body {
     border: 1px solid #000000;
     font-size: 16px;
     transition: all 0.3s ease;
+    margin-bottom: 15px;
 }
 
-.form-section input:focus,
-.input-box input:focus {
+.form-section input:focus {
     border-color: #16a085;
     outline: none;
 }
 
-.form-section input::placeholder,
-.input-box input::placeholder {
-    color: #4e4e4e;
-}
-
-.form-section button,
-.input-box.button input {
+.form-section button {
     height: 50px;
     width: 100%;
     background: #000000;
@@ -71,30 +59,141 @@ body {
     border-radius: 5px;
     font-size: 16px;
     font-weight: 500;
-    font-style: oblique;
     cursor: pointer;
     transition: background 0.3s ease;
+    margin-bottom: 15px;
 }
 
-.form-section button:hover,
-.input-box.button input:hover {
+.form-section button:hover {
     background: #5f5f5f;
 }
 
-.form-section p,
-.text h3 {
-    text-align: center;
-    font-size: 14px;
+/* Password Strength Indicator */
+#password-strength {
+    margin-top: 10px;
+    height: 10px;
+    width: 100%;
+    background-color: #e0e0e0;
+    border-radius: 5px;
+}
+
+#password-strength span {
+    display: block;
+    height: 100%;
+    border-radius: 5px;
+}
+
+/* Password Display Section */
+.password-display {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     margin-top: 20px;
 }
 
-.form-section a,
+.password-list-container {
+    width: 100%;
+    margin-top: 15px;
+}
+
+.password-item {
+    width: 100%;
+    margin-bottom: 15px;
+    padding: 15px;
+    background: #f8f8f8;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.password-info {
+    font-size: 14px;
+    text-align: left;
+    flex-grow: 1;
+}
+
+.password-info strong {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 16px;
+}
+
+.password-info p {
+    margin-bottom: 5px;
+}
+
+.password-field {
+    width: 100%;
+    padding: 5px;
+    margin-top: 5px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    background: white;
+}
+
+.password-actions {
+    display: flex;
+    gap: 5px;
+    margin-left: 10px;
+}
+
+.password-actions button {
+    padding: 5px 10px;
+    border-radius: 3px;
+    cursor: pointer;
+    border: none;
+    background: #e0e0e0;
+    font-size: 12px;
+}
+
+.password-actions button:hover {
+    background: #d0d0d0;
+}
+
+.error {
+    color: #ff0000;
+    font-size: 12px;
+}
+
+.logout-btn {
+    background: #d30000;
+    color: rgb(50, 255, 5);
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+    border: none;
+    font-size: 16px;
+}
+
+.logout-btn:hover {
+    background: #b700ff;
+}
+
+.text {
+    margin-top: 15px;
+}
+
+.text h3 {
+    font-size: 14px;
+    font-weight: normal;
+}
+
 .text a {
-    color: #0b34ff;
+    color: #16a085;
     text-decoration: none;
 }
 
-.form-section a:hover,
 .text a:hover {
     text-decoration: underline;
+}
+
+.input-box {
+    margin-bottom: 15px;
+}
+
+.input-box.button {
+    margin-top: 20px;
 }
