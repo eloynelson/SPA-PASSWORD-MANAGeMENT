@@ -7,49 +7,74 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="wrapper" id="app">
-        <!-- Login Section -->
-        <section id="login-section" class="form-section">
-            <h1>PSAFE</h1>
-            <form id="login-form">
-                <label for="login-username">Username</label>
-                <input id="login-username" type="text" placeholder="Enter your username" required>
-                
-                <label for="login-password">Password</label>
-                <input id="login-password" type="password" placeholder="Enter your password" required>
-                
-                <button type="submit">Login</button>
-                
-                <p>Don't have an account? <a href="#" id="show-signup">Sign up</a></p>
-            </form>
-        </section>
 
-        <!-- Signup Section -->
-        <section id="signup-section" class="form-section" style="display: none;">
-            <h2>Sign up</h2>
-            <form id="signup-form">
-                <div class="input-box">
-                    <input type="text" id="signup-name" placeholder="Enter your name" required>
-                </div>
-                <div class="input-box">
-                    <input type="email" id="signup-email" placeholder="Enter your email" required>
-                </div>
-                <div class="input-box">
-                    <input type="password" id="signup-password" placeholder="Create password" required>
-                </div>
-                <div class="input-box">
-                    <input type="password" id="confirm-password" placeholder="Confirm password" required>
-                </div>
-                <div class="input-box button">
-                    <input type="submit" value="Create Account">
-                </div>
-                <div class="text">
-                    <h3>Already have an account? <a href="#" id="show-login">Login now</a></h3>
-                </div>
-            </form>
-        </section>
-    </div>
+<div class="wrapper" id="app">
+    <!-- Login Section -->
+    <section id="login-section" class="form-section">
+        <h1>PSAFE</h1>
+        <form id="login-form">
+            <label for="login-username">Username</label>
+            <input id="login-username" type="text" placeholder="Enter your username" required>
+            
+            <label for="login-password">Password</label>
+            <input id="login-password" type="password" placeholder="Enter your password" required>
+            
+            <button type="submit">Login</button>
+            
+            <p>Don't have an account? <a href="#" id="show-signup">Sign up</a></p>
+        </form>
+    </section>
 
-    <script src="app.js"></script>
+    <!-- Signup Section -->
+    <section id="signup-section" class="form-section" style="display: none;">
+        <h2>Sign up</h2>
+        <form id="signup-form">
+            <div class="input-box">
+                <input type="text" id="signup-name" placeholder="Enter your name" required>
+            </div>
+            <div class="input-box">
+                <input type="email" id="signup-email" placeholder="Enter your email" required>
+            </div>
+            <div class="input-box">
+                <input type="password" id="signup-password" placeholder="Create password" required>
+                <div id="password-strength"></div>
+            </div>
+            <div class="input-box">
+                <input type="password" id="confirm-password" placeholder="Confirm password" required>
+            </div>
+            <div class="input-box button">
+                <input type="submit" value="Create Account">
+            </div>
+            <div class="text">
+                <h3>Already have an account? <a href="#" id="show-login">Login now</a></h3>
+            </div>
+        </form>
+    </section>
+
+    <!-- Dashboard Section -->
+    <section id="dashboard-section" class="form-section" style="display: none;">
+        <h1>Welcome, <span id="username"></span></h1>
+        
+        <!-- Save Password Form -->
+        <div class="form-section">
+            <h2>Save a New Password</h2>
+            <input id="site-name" type="text" placeholder="Website Name">
+            <input id="site-username" type="text" placeholder="Username">
+            <input id="site-password" type="password" placeholder="Password">
+            <button id="save-password">Save Password</button>
+        </div>
+
+        <!-- Stored Passwords Section -->
+        <div class="password-display">
+            <h2>Stored Passwords</h2>
+            <div id="password-list-container" class="password-list-container"></div>
+        </div>
+
+        <!-- Logout Button -->
+        <button id="logout" class="logout-btn">Logout</button>
+    </section>
+</div>
+
+<script src="app.js"></script>
 </body>
 </html>
