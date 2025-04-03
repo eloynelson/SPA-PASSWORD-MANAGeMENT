@@ -1,7 +1,19 @@
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', async function () {
     // Encryption key storage name
     const ENCRYPTION_KEY_STORAGE = 'encryption_key';
     
+    // Load valid users from JSON
+    let validUsers = [];
+    
+    try {
+        const response = await fetch('users.json');
+        const data = await response.json();
+        validUsers = data.validUsers || [];
+        console.log("Loaded valid users:", validUsers);
+    } catch (error) {
+        console.error("Error loading valid users:", error);
+    }
+
     // Generate or retrieve encryption key
     async function getEncryptionKey(username) {
         const keyName = `${username}_${ENCRYPTION_KEY_STORAGE}`;
@@ -68,7 +80,7 @@ document.addEventListener('DOMContentLoaded', function () {
         return new TextDecoder().decode(decryptedData);
     }
     
-    // Modified savePassword function with encryption
+    // Save password with encryption
     async function savePassword(username, site, siteUsername, sitePassword) {
         try {
             const keyData = await getEncryptionKey(username);
@@ -105,7 +117,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
     
-    // Modified displayPasswords function with decryption
+    // Display passwords with decryption
     async function displayPasswords(username) {
         let passwordListContainer = document.getElementById('password-list-container');
         passwordListContainer.innerHTML = "";
@@ -119,10 +131,8 @@ document.addEventListener('DOMContentLoaded', function () {
             if (userPasswords.length === 0) {
                 passwordListContainer.innerHTML = "<p>No saved passwords yet.</p>";
             } else {
-                // Process passwords in parallel for better performance
                 const passwordItems = await Promise.all(userPasswords.map(async (item, index) => {
                     try {
-                        // Convert stored string back to Uint8Array
                         const encryptedData = new Uint8Array(item.password.split(',').map(Number));
                         const decryptedPassword = await decryptData(key, encryptedData);
                         
@@ -159,38 +169,30 @@ document.addEventListener('DOMContentLoaded', function () {
                 
                 passwordListContainer.innerHTML = passwordItems.join('');
                 
-                // Reattach event listeners
+                // Attach event listeners
                 document.querySelectorAll('.toggle-btn').forEach(button => {
-                    button.addEventListener('click', function () {
-                        let index = this.getAttribute('data-index');
-                        let passwordInput = document.getElementById('password-' + index);
-
-                        if (passwordInput.type === "password") {
-                            passwordInput.type = "text";
-                            this.innerText = "Hide";
-                        } else {
-                            passwordInput.type = "password";
-                            this.innerText = "Show";
-                        }
+                    button.addEventListener('click', function() {
+                        const index = this.getAttribute('data-index');
+                        const passwordInput = document.getElementById(`password-${index}`);
+                        passwordInput.type = passwordInput.type === "password" ? "text" : "password";
+                        this.textContent = passwordInput.type === "password" ? "Show" : "Hide";
                     });
                 });
 
                 document.querySelectorAll('.edit-btn').forEach(button => {
-                    button.addEventListener('click', async function () {
-                        let index = this.getAttribute('data-index');
-                        let newPassword = prompt("Enter new password:");
-
-                        if (newPassword !== null && newPassword.trim() !== "") {
+                    button.addEventListener('click', async function() {
+                        const index = this.getAttribute('data-index');
+                        const newPassword = prompt("Enter new password:");
+                        if (newPassword) {
                             try {
-                                const keyData = await getEncryptionKey(currentUser);
+                                const keyData = await getEncryptionKey(username);
                                 const key = await importKey(keyData);
                                 const encryptedPassword = await encryptData(key, newPassword);
                                 const encryptedPasswordStr = Array.from(encryptedPassword).join(',');
                                 
-                                let userPasswords = JSON.parse(localStorage.getItem(currentUser + '_passwords')) || [];
                                 userPasswords[index].password = encryptedPasswordStr;
-                                localStorage.setItem(currentUser + '_passwords', JSON.stringify(userPasswords));
-                                displayPasswords(currentUser);
+                                localStorage.setItem(username + '_passwords', JSON.stringify(userPasswords));
+                                displayPasswords(username);
                             } catch (error) {
                                 console.error("Error updating password:", error);
                                 alert("Error updating password.");
@@ -200,45 +202,47 @@ document.addEventListener('DOMContentLoaded', function () {
                 });
 
                 document.querySelectorAll('.delete-btn').forEach(button => {
-                    button.addEventListener('click', function () {
-                        let index = this.getAttribute('data-index');
-                        let userPasswords = JSON.parse(localStorage.getItem(currentUser + '_passwords')) || [];
+                    button.addEventListener('click', function() {
+                        const index = this.getAttribute('data-index');
                         userPasswords.splice(index, 1);
-                        localStorage.setItem(currentUser + '_passwords', JSON.stringify(userPasswords));
-                        displayPasswords(currentUser);
+                        localStorage.setItem(username + '_passwords', JSON.stringify(userPasswords));
+                        displayPasswords(username);
                     });
                 });
             }
         } catch (error) {
-            console.error("Error initializing decryption:", error);
+            console.error("Error loading passwords:", error);
             passwordListContainer.innerHTML = "<p class='error'>Error loading passwords. Please try again.</p>";
         }
     }
 
+    // Check current user on load
     let currentUser = localStorage.getItem('currentUser');
-
-    if (!currentUser) {
-        document.getElementById('login-section').style.display = 'block';
-        document.getElementById('signup-section').style.display = 'none';
-        document.getElementById('dashboard-section').style.display = 'none';
-    } else {
+    if (currentUser) {
         document.getElementById('login-section').style.display = 'none';
-        document.getElementById('signup-section').style.display = 'none';
         document.getElementById('dashboard-section').style.display = 'block';
         document.getElementById('username').innerText = currentUser;
-        displayPasswords(currentUser); // Show user passwords
+        displayPasswords(currentUser);
     }
 
-    // Login functionality
-    document.getElementById('login-form').addEventListener('submit', function (e) {
+    // Login form submission
+    document.getElementById('login-form').addEventListener('submit', function(e) {
         e.preventDefault();
-        let username = document.getElementById('login-username').value;
-        let password = document.getElementById('login-password').value;
+        const username = document.getElementById('login-username').value;
+        const password = document.getElementById('login-password').value;
 
-        if (localStorage.getItem(username) === password) {
+        // Check against JSON valid users or localStorage
+        const isValidUser = validUsers.some(user => 
+            user.username === username && user.password === password
+        ) || localStorage.getItem(username) === password;
+
+        if (isValidUser) {
             localStorage.setItem('currentUser', username);
+            // Store password in localStorage if it's from JSON
+            if (!localStorage.getItem(username)) {
+                localStorage.setItem(username, password);
+            }
             document.getElementById('login-section').style.display = 'none';
-            document.getElementById('signup-section').style.display = 'none';
             document.getElementById('dashboard-section').style.display = 'block';
             document.getElementById('username').innerText = username;
             displayPasswords(username);
@@ -247,43 +251,47 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // Signup functionality
-    document.getElementById('signup-form').addEventListener('submit', function (e) {
+    // Signup form submission
+    document.getElementById('signup-form').addEventListener('submit', function(e) {
         e.preventDefault();
-        let username = document.getElementById('signup-name').value;
-        let password = document.getElementById('signup-password').value;
-        let confirmPassword = document.getElementById('confirm-password').value;
+        const username = document.getElementById('signup-name').value;
+        const password = document.getElementById('signup-password').value;
+        const confirmPassword = document.getElementById('confirm-password').value;
 
         if (password !== confirmPassword) {
             alert("Passwords do not match.");
             return;
         }
 
-        if (localStorage.getItem(username)) {
+        // Check if username exists in JSON or localStorage
+        const userExists = validUsers.some(user => user.username === username) || 
+                          localStorage.getItem(username);
+
+        if (userExists) {
             alert("Username already exists.");
             return;
         }
 
+        // Store in localStorage
         localStorage.setItem(username, password);
         alert("Account created successfully!");
         document.getElementById('signup-section').style.display = 'none';
         document.getElementById('login-section').style.display = 'block';
     });
 
-    // Show signup form
-    document.getElementById('show-signup').addEventListener('click', function () {
+    // Navigation between forms
+    document.getElementById('show-signup').addEventListener('click', function() {
         document.getElementById('login-section').style.display = 'none';
         document.getElementById('signup-section').style.display = 'block';
     });
 
-    // Show login form
-    document.getElementById('show-login').addEventListener('click', function () {
+    document.getElementById('show-login').addEventListener('click', function() {
         document.getElementById('signup-section').style.display = 'none';
         document.getElementById('login-section').style.display = 'block';
     });
 
-    // Logout functionality
-    document.getElementById('logout').addEventListener('click', function () {
+    // Logout
+    document.getElementById('logout').addEventListener('click', function() {
         localStorage.removeItem('currentUser');
         document.getElementById('dashboard-section').style.display = 'none';
         document.getElementById('login-section').style.display = 'block';
@@ -293,49 +301,32 @@ document.addEventListener('DOMContentLoaded', function () {
     const passwordInput = document.getElementById('signup-password');
     const passwordStrengthDiv = document.getElementById('password-strength');
 
-    passwordInput.addEventListener('input', function () {
+    passwordInput.addEventListener('input', function() {
         const password = passwordInput.value;
-        let strength = getPasswordStrength(password);
-        updateStrengthIndicator(strength);
-    });
-
-    // Function to calculate password strength
-    function getPasswordStrength(password) {
         let strength = 0;
         if (password.length > 8) strength++;
         if (/[A-Z]/.test(password)) strength++;
         if (/[a-z]/.test(password)) strength++;
         if (/\d/.test(password)) strength++;
-        if (/[!@#$%^&*(),.?":{}|<>]/.test(password)) strength++;
+        if (/[^A-Za-z0-9]/.test(password)) strength++;
 
-        return strength;
-    }
-
-    // Function to update the strength indicator
-    function updateStrengthIndicator(strength) {
-        let strengthColor = "#e0e0e0"; // Default: gray
-        switch (strength) {
-            case 1:
-                strengthColor = "#ff0000"; // Weak
-                break;
-            case 2:
-                strengthColor = "#ff9900"; // Fair
-                break;
-            case 3:
-                strengthColor = "#66cc00"; // Good
-                break;
-            case 4:
-                strengthColor = "#00cc00"; // Strong
-                break;
+        let color = "#e0e0e0";
+        switch(strength) {
+            case 1: color = "#ff0000"; break;
+            case 2: color = "#ff9900"; break;
+            case 3: color = "#66cc00"; break;
+            case 4: color = "#00cc00"; break;
         }
-        passwordStrengthDiv.innerHTML = `<span style="width: ${strength * 25}% ; background-color: ${strengthColor};"></span>`;
-    }
+        passwordStrengthDiv.innerHTML = `<span style="width: ${strength * 25}%; background-color: ${color};"></span>`;
+    });
 
-    // Modified save password event listener
-    document.getElementById('save-password').addEventListener('click', async function () {
-        let siteName = document.getElementById('site-name').value;
-        let siteUsername = document.getElementById('site-username').value;
-        let sitePassword = document.getElementById('site-password').value;
+    // Save password button
+    document.getElementById('save-password').addEventListener('click', async function() {
+        if (!currentUser) return;
+        
+        const siteName = document.getElementById('site-name').value;
+        const siteUsername = document.getElementById('site-username').value;
+        const sitePassword = document.getElementById('site-password').value;
 
         if (!siteName || !siteUsername || !sitePassword) {
             alert("Please fill all fields.");
@@ -347,7 +338,6 @@ document.addEventListener('DOMContentLoaded', function () {
         
         if (result.success) {
             displayPasswords(currentUser);
-            // Clear the form
             document.getElementById('site-name').value = '';
             document.getElementById('site-username').value = '';
             document.getElementById('site-password').value = '';
