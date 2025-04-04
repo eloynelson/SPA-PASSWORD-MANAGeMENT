@@ -1,12 +1,16 @@
 {
     "validUsers": [
       {
-        "username": "admin",
-        "password": "admin123"
+        "username": "eloy",
+        "password": "Netoneto123"
       },
       {
-        "username": "user1",
-        "password": "password"
+        "username": "ramdomuser1",
+        "password": "password1234"
+      },
+      {
+        "username": "finaluser",
+        "password": "final123"
       }
     ]
   }
